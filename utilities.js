@@ -65,19 +65,27 @@ export default class Utilities {
     }
 
     static loadCSSFromFile(filePath) {
-        return fetch(filePath)
+        return fetch(this.convertToURL(filePath))
             .then(res => res.text())
-            .then(css => {
-                const style = document.createElement('style');
-                style.textContent = css;
-                return style;
-            });
+            .then(css => new CSSStyleSheet().replace(css))
+            .catch(error => console.error('Error loading CSS:', error));
     }
 
     static loadJSONFromFile(filePath) {
-        return fetch(filePath)
+        return fetch(this.convertToURL(filePath))
             .then(response => response.json())
             .then(data => data) // Handle the JSON object here
             .catch(error => console.error('Error loading JSON:', error));
+    }
+
+    static convertToURL(path, source = import.meta.url) {
+        if (this.isAbsoluteURL(path))
+            return path;
+
+        return new URL(path, source);
+    }
+
+    static isAbsoluteURL(path) {
+        return /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(path);
     }
 }
