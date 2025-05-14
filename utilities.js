@@ -65,21 +65,21 @@ export default class Utilities {
     }
 
     static loadCSSFromFile(filePath) {
-        return fetch(this.convertToURL(filePath))
+        return fetch(Utilities.convertToURL(filePath))
             .then(res => res.text())
             .then(css => new CSSStyleSheet().replace(css))
             .catch(error => console.error('Error loading CSS:', error));
     }
 
     static loadJSONFromFile(filePath) {
-        return fetch(this.convertToURL(filePath))
+        return fetch(Utilities.convertToURL(filePath))
             .then(response => response.json())
             .then(data => data) // Handle the JSON object here
             .catch(error => console.error('Error loading JSON:', error));
     }
 
     static convertToURL(path, source = import.meta.url) {
-        if (this.isAbsoluteURL(path))
+        if (Utilities.isAbsoluteURL(path))
             return path;
 
         return new URL(path, source);

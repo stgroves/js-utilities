@@ -13,7 +13,7 @@ jobs:
     - name: Get token expiration date
       run: |
         echo "Checking Personal Access Token expiration..."
-        curl -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+        curl -H "Authorization: token ${{ secrets.PAT }}" \
              -H "Accept: application/vnd.github+json" \
              https://api.github.com/user | jq '.created_at'
 
