@@ -33,11 +33,15 @@ jobs:
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         echo "$VERSION"
 
+    - name: Set up npm auth
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+
     - name: Get Published Version
       id: published_version
       run: |
         PUBLISHED_VERSION=$(npm show @stgroves/js-utilities version || echo "0.0.0")
         echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
+        echo "$PUBLISHED_VERSION"
 
     - name: Check Version Differences
       id: check_version
