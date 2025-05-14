@@ -48,6 +48,11 @@ jobs:
             echo "SHOULD_PUBLISH=true" >> $GITHUB_ENV
           fi
 
+      - name: Set up .npmrc for GitHub Packages
+        run: |
+          echo "@STGroves:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" >> ~/.npmrc
+
       - name: Build Package
         run: npm run build || echo "No build step"
 
