@@ -2,8 +2,7 @@ name: Publish to GitHub Packages
 
 on:
   push:
-    branches:
-      - main # Triggers on pushes to the main branch
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -11,50 +10,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-        registry-url: 'https://npm.pkg.github.com'
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: 'https://npm.pkg.github.com'
+          always-auth: true
 
-    - name: List Files (Debugging Step)
-      run: ls -l
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Get Local Version
-      id: local_version
-      run: |
-        VERSION=$(node -p 'require("./package.json").version')
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        echo "$VERSION"
+      - name: Get Local Version
+        id: local_version
+        run: |
+          VERSION=$(node -p 'require("./package.json").version')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Local version: $VERSION"
 
-    - name: Set up npm auth
-      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.PAT }}" > ~/.npmrc
+      - name: Get Published Version (GitHub Packages)
+        id: published_version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PAT }}
+        run: |
+          PUBLISHED_VERSION=$(npm view @OWNER/package-name version 2>/dev/null || echo "0.0.0")
+          echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
+          echo "Published version: $PUBLISHED_VERSION"
 
-    - name: Get Published Version
-      id: published_version
-      run: |
-        PUBLISHED_VERSION=$(npm show @stgroves/js-utilities version || echo "0.0.0")
-        echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
-        echo "$PUBLISHED_VERSION"
+      - name: Check Version Differences
+        id: check_version
+        run: |
+          if [ "$VERSION" == "$PUBLISHED_VERSION" ]; then
+            echo "SHOULD_PUBLISH=false" >> $GITHUB_ENV
+          else
+            echo "SHOULD_PUBLISH=true" >> $GITHUB_ENV
+          fi
 
-    - name: Check Version Differences
-      id: check_version
-      run: |
-        if [ "$VERSION" == "$PUBLISHED_VERSION" ]; then
-          echo "No version change detected. Skipping publish."
-          exit 1
-        fi
+      - name: Build Package
+        run: npm run build || echo "No build step"
 
-    - name: Build Package (if necessary)
-      run: npm run build || echo "No build step needed"
-
-    - name: Publish to GitHub Packages
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.PAT }}
+      - name: Publish to GitHub Packages
+        if: env.SHOULD_PUBLISH == 'true'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PAT }}
