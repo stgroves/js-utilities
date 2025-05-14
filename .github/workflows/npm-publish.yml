@@ -23,6 +23,24 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: Get Local Version
+      id: local_version
+      run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+    - name: Get Published Version
+      id: published_version
+      run: |
+        PUBLISHED_VERSION=$(npm show @stgroves/js-utilities version || echo "0.0.0")
+        echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
+
+    - name: Check Version Differences
+      id: check_version
+      run: |
+        if [ "$VERSION" == "$PUBLISHED_VERSION" ]; then
+          echo "No version change detected. Skipping publish."
+          exit 1
+        fi
+
     - name: Build Package (if necessary)
       run: npm run build || echo "No build step needed"
 
