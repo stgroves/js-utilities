@@ -1,6 +1,6 @@
 {
   "description": "Reusable JS utilities package",
-  "name": "@STGroves/js-utilities",
+  "name": "@stgroves/js-utilities",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },

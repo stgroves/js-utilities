@@ -79,6 +79,9 @@ export default class Utilities {
     }
 
     static convertToURL(path, source = import.meta.url) {
+        if (path instanceof URL)
+            return path;
+
         if (Utilities.isAbsoluteURL(path))
             return path;
 
