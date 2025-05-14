@@ -1,12 +1,12 @@
 {
-  "name": "@stgroves/js-utilities",
-  "version": "0.0.2",
   "description": "Reusable JS utilities package",
+  "name": "@STGroves/js-utilities",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/STGroves/JS-Utilities.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  }
+  "version": "0.0.2"
 }
