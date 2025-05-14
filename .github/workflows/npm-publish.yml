@@ -25,7 +25,7 @@ jobs:
 
     - name: Get Local Version
       id: local_version
-      run: echo "VERSION=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_ENV
+      run: echo "VERSION=$(node -p 'require("./package.json").version')" >> $GITHUB_ENV
 
     - name: Get Published Version
       id: published_version
