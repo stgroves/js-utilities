@@ -3,6 +3,7 @@ name: Check PAT Expiry
 on:
   schedule:
     - cron: '0 0 * * 1' # Runs weekly on Monday at midnight
+  workflow_dispatch:
 
 jobs:
   check-expiry:
