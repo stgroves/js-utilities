@@ -33,7 +33,7 @@ jobs:
       - name: Get Published Version (GitHub Packages)
         id: published_version
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PAT }}
+          NODE_AUTH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           PUBLISHED_VERSION=$(npm view @stgroves/js-utilities version 2>/dev/null || echo "0.0.0")
           echo "PUBLISHED_VERSION=$PUBLISHED_VERSION" >> $GITHUB_ENV
@@ -51,7 +51,7 @@ jobs:
       - name: Set up .npmrc for GitHub Packages
         run: |
           echo "@STGroves:registry=https://npm.pkg.github.com/" >> ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PAT }}" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.ACCESS_TOKEN }}" >> ~/.npmrc
 
       - name: Build Package
         run: npm run build || echo "No build step"
@@ -60,4 +60,4 @@ jobs:
         if: env.SHOULD_PUBLISH == 'true'
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PAT }}
+          NODE_AUTH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
