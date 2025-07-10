@@ -8,5 +8,8 @@
     "type": "git",
     "url": "https://github.com/stgroves/js-utilities.git"
   },
-  "version": "0.0.7"
+  "version": "0.0.9",
+  "dependencies": {
+    "libsodium-wrappers": "^0.7.15"
+  }
 }
