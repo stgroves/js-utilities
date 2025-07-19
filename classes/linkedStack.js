@@ -8,7 +8,7 @@ class Node {
     }
 }
 
-export default class LinkedStack {
+export class LinkedStack {
     #size;
     #maxSize;
     #top;

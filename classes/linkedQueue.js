@@ -8,7 +8,7 @@ class Node {
     }
 }
 
-export default class LinkedQueue {
+export class LinkedQueue {
     static Mode = Object.freeze({DENY: 0, CYCLE: 1});
 
     #front;

@@ -1,4 +1,4 @@
-export default class Queue {
+export class Queue {
     static Mode = Object.freeze({DENY: 0, CYCLE: 1});
 
     #maxSize;
